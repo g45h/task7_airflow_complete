@@ -26,4 +26,26 @@ limit 5
 
 
 Средний рейтинг по каждому дню (результат должен быть в виде timestamp type):
+$match: {
+      score: { $exists: true, $ne: null },
+      at: { $exists: true, $ne: null }
+    }
+
+$addFields: {
+  at: {
+    $toDate: "$at"
+  }
+}
+
+$group: {
+  _id: {
+    $dateToString: {
+      format: "%Y-%m-%d",
+      date: "$at"
+    }
+  },
+  averageScore: { $avg: "$score" }
+}
+
+
 
